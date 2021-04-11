@@ -5,6 +5,11 @@ const pizzaController = {
   //get all pizzas-- callback function for the GET /api/pizzas route
   getAllPizza(req,res) {
     Pizza.find({})
+    .populate({
+      path: 'comments',
+      select: '-__v'
+    }).select('-__v')
+    .sort({ _id: -1 })
     .then(dbPizzaData => res.json(dbPizzaData))
     .catch(err => {
         console.log(err);
@@ -14,6 +19,11 @@ const pizzaController = {
 //get one pizza by id. destructured params out of it because thats the only data we need for the request to be fulfilled
 getPizzaById({ params }, res) {
   Pizza.findOne({ _id: params.id })
+  .populate({
+    path: 'comments',
+    select: '-__v'
+  })
+  .select('-__v')
     .then(dbPizzaData => res.json(dbPizzaData))
     .catch(err => {
       console.log(err);
